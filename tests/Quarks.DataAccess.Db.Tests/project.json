@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "Moq": "4.5.21",
+    "NHibernate": "4.0.4.4000",
+    "NUnit": "3.4.1",
+    "Quarks.DataAccess.Db": "1.0.0-*",
+    "Quarks.Transactions": "2.1.0-*",
+    "System.Data.SqlClient": "4.1.0"
+  },
+  "frameworks": {
+    "net46": {
+    }
+  },
+  "version": "1.0.0-*"
+}

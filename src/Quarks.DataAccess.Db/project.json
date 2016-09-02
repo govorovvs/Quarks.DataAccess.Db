@@ -1,0 +1,29 @@
+﻿{
+  "dependencies": {
+    "Quarks.Transactions": "2.1.0-*",
+    "System.Data.Common": "4.1.0"
+  },
+  "frameworks": {
+    "net451": {
+    },
+    "net46": {
+    },
+    "netcoreapp1.0": {
+    },
+    "netstandard1.6": {
+    }
+  },
+  "packOptions": {
+    "authors": [ "victor.govorov" ],
+    "iconUrl": "https://github.com/govorovvs/Quarks.DataAccess.Db/blob/master/logo.png?raw=true",
+    "owners": [ "victor.govorov" ],
+    "projectUrl": "https://github.com/govorovvs/Quarks.DataAccess.Db",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/govorovvs/Quarks.DataAccess.Db.git"
+    },
+    "tags": [ "architecture", "dataaccess", "db", "database", "ado.net" ]
+  },
+  "title": "Quarks.DataAccess.Db",
+  "version": "1.0.0-*"
+}
