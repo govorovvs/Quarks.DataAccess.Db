@@ -23,7 +23,7 @@
       "type": "git",
       "url": "https://github.com/govorovvs/Quarks.DataAccess.Db.git"
     },
-    "tags": [ "quarks", "architecture", "dataaccess", "db", "database", "ado.net" ]
+    "tags": [ "quarks", "architecture", "dataaccess", "db", "database", "dapper" ]
   },
   "title": "Quarks.DataAccess.Db",
   "version": "1.2.0-*"
