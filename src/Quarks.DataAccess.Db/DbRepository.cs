@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using Quarks.DataAccess.Db.ConnectionManagement;
 using AdoNetTransaction = System.Data.Common.DbTransaction;
 
@@ -20,7 +24,31 @@ namespace Quarks.DataAccess.Db
 
 		protected internal DbConnection Connection => Transaction.Connection;
 
-		private DbTransaction DbTransaction
+	    protected Task<int> ExecuteAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
+	    {
+	        CommandDefinition commandDefinition = 
+                new CommandDefinition(queryObject.Text, queryObject.Parameters, Transaction, commandTimeout, queryObject.CommandType, cancellationToken:cancellationToken);
+
+	        return Connection.ExecuteAsync(commandDefinition);
+	    }
+
+        protected Task<IEnumerable<dynamic>> QueryAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
+        {
+            CommandDefinition commandDefinition =
+                new CommandDefinition(queryObject.Text, queryObject.Parameters, Transaction, commandTimeout, queryObject.CommandType, cancellationToken: cancellationToken);
+
+            return Connection.QueryAsync(commandDefinition);
+        }
+
+        protected Task<IEnumerable<T>> QueryAsync<T>(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
+	    {
+            CommandDefinition commandDefinition =
+                new CommandDefinition(queryObject.Text, queryObject.Parameters, Transaction, commandTimeout, queryObject.CommandType, cancellationToken: cancellationToken);
+
+            return Connection.QueryAsync<T>(commandDefinition);
+        }
+
+        private DbTransaction DbTransaction
 		{
 			get { return DbTransaction.GetCurrent(ConnectionManager); }
 		}

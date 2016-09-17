@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
-    "Quarks.Transactions": "2.3.0-*"
+    "Quarks.Transactions": "2.3.0-*",
+    "Dapper": "1.50.2" 
   },
   "frameworks": {
     "net45": {
