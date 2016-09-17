@@ -54,7 +54,7 @@ public class RenameUserCommandHandler : ICommandHandler<RenameUserCommand>
 		{
 			User user = await _userRepository.FindByIdAsync(command.Id, ct);
 			user.Name = command.Name;
-			await _userRepository.Modify(user, ct);
+			await _userRepository.ModifyAsync(user, ct);
 			await transaction.CommitAsync(ct);
 		}
 	}
