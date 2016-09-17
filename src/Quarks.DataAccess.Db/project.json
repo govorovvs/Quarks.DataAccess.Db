@@ -7,7 +7,7 @@
       "frameworkAssemblies": { 
         "System.Data": "4.0.0.0" }
     },
-    "netstandard1.6": {
+    "netstandard1.3": {
       "dependencies": {
         "System.Data.Common": "4.1.0"
       }
