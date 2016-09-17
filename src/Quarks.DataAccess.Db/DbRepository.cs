@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Quarks.DataAccess.Db.ConnectionManagement;
-using AdoNetTransaction = System.Data.Common.DbTransaction;
 
 namespace Quarks.DataAccess.Db
 {
@@ -20,7 +19,7 @@ namespace Quarks.DataAccess.Db
 
 		public IDbConnectionManager ConnectionManager { get; }
 
-		protected internal AdoNetTransaction Transaction => DbTransaction.Transaction;
+		protected internal DbTransaction Transaction => DbTransaction.Transaction;
 
 		protected internal DbConnection Connection => Transaction.Connection;
 
@@ -48,9 +47,9 @@ namespace Quarks.DataAccess.Db
             return Connection.QueryAsync<T>(commandDefinition);
         }
 
-        private DbTransaction DbTransaction
+        private InternalDbTransaction DbTransaction
 		{
-			get { return DbTransaction.GetCurrent(ConnectionManager); }
+			get { return InternalDbTransaction.GetCurrent(ConnectionManager); }
 		}
 	}
 }

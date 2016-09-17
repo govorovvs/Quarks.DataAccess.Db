@@ -33,7 +33,7 @@ namespace Quarks.DataAccess.Db.Tests
 	    [Test]
 		public void Can_Be_Constructed_With_ConnectionManager()
 		{
-			DbTransaction transaction = new DbTransaction(_connectionManager);
+			InternalDbTransaction transaction = new InternalDbTransaction(_connectionManager);
 
 			Assert.That(transaction.ConnectionManager, Is.EqualTo(_connectionManager));
 		}
@@ -41,7 +41,7 @@ namespace Quarks.DataAccess.Db.Tests
 		[Test]
 		public void Is_Instance_Of_IDependentTransaction()
 		{
-			DbTransaction transaction = CreateTransaction();
+			InternalDbTransaction transaction = CreateTransaction();
 
 			Assert.That(transaction, Is.InstanceOf<IDependentTransaction>());
 		}
@@ -49,7 +49,7 @@ namespace Quarks.DataAccess.Db.Tests
 		[Test]
 		public void Transaction_Test()
 		{
-			DbTransaction transaction = CreateTransaction();
+			InternalDbTransaction transaction = CreateTransaction();
 
 			Assert.That(transaction.Transaction, Is.SameAs(_transaction));
 		}
@@ -57,7 +57,7 @@ namespace Quarks.DataAccess.Db.Tests
 		[Test]
 		public void Dispose_Disposes_Transaction()
 		{
-			DbTransaction transaction = CreateTransaction();
+			InternalDbTransaction transaction = CreateTransaction();
 
 			transaction.Dispose();
 
@@ -67,7 +67,7 @@ namespace Quarks.DataAccess.Db.Tests
 		[Test]
 		public void Dispose_Disposes_Connection()
 		{
-			DbTransaction transaction = CreateTransaction();
+			InternalDbTransaction transaction = CreateTransaction();
 
 			transaction.Dispose();
 
@@ -103,9 +103,9 @@ namespace Quarks.DataAccess.Db.Tests
 			Assert.ThrowsAsync<ObjectDisposedException>(() => transaction.CommitAsync(_cancellationToken));
 		}
 
-		private DbTransaction CreateTransaction()
+		private InternalDbTransaction CreateTransaction()
 		{
-			var transaction =  new DbTransaction(_connectionManager);
+			var transaction =  new InternalDbTransaction(_connectionManager);
 
 			Assert.That(transaction.Transaction, Is.Not.Null);
 

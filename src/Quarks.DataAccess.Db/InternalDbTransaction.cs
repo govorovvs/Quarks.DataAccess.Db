@@ -4,24 +4,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quarks.DataAccess.Db.ConnectionManagement;
 using Quarks.Transactions;
-using AdoNetTransaction = System.Data.Common.DbTransaction;
 
 namespace Quarks.DataAccess.Db
 {
-	internal sealed class DbTransaction : IDependentTransaction
+	internal sealed class InternalDbTransaction : IDependentTransaction
 	{
 		private static readonly object StaticLock = new object();
 		private readonly object _lock = new object();
 		private bool _disposed;
-		private volatile AdoNetTransaction _transaction;
+		private volatile DbTransaction _transaction;
 		private volatile DbConnection _connection;
 
-		public DbTransaction(IDbConnectionManager connectionManager)
+		public InternalDbTransaction(IDbConnectionManager connectionManager)
 		{
 			ConnectionManager = connectionManager;
 		}
 
-		public AdoNetTransaction Transaction => GetOrCreateTransaction();
+		public DbTransaction Transaction => GetOrCreateTransaction();
 
 		public IDbConnectionManager ConnectionManager { get; }
 
@@ -53,7 +52,7 @@ namespace Quarks.DataAccess.Db
 			}
 		}
 
-		private AdoNetTransaction GetOrCreateTransaction()
+		private DbTransaction GetOrCreateTransaction()
 		{
 			ThrowIfDisposed();
 
@@ -73,12 +72,12 @@ namespace Quarks.DataAccess.Db
 			return _transaction;
 		}
 
-		public static DbTransaction GetCurrent(IDbConnectionManager connectionManager)
+		public static InternalDbTransaction GetCurrent(IDbConnectionManager connectionManager)
 		{
 			var transaction = Transactions.Transaction.Current;
 			if (transaction == null)
 			{
-				return new DbTransaction(connectionManager);
+				return new InternalDbTransaction(connectionManager);
 			}
 
 			string key = connectionManager.GetHashCode().ToString();
@@ -90,13 +89,13 @@ namespace Quarks.DataAccess.Db
 				{
 					if (!transaction.DependentTransactions.TryGetValue(key, out current))
 					{
-						current = new DbTransaction(connectionManager);
+						current = new InternalDbTransaction(connectionManager);
 						transaction.Enlist(key, current);
 					}
 				}
 			}
 
-			return (DbTransaction)current;
+			return (InternalDbTransaction)current;
 		}
 	}
 }
