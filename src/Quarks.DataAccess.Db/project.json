@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Quarks.Transactions": "2.2.0-*"
+    "Quarks.Transactions": "2.3.0-*"
   },
   "frameworks": {
     "net45": {
@@ -22,8 +22,8 @@
       "type": "git",
       "url": "https://github.com/govorovvs/Quarks.DataAccess.Db.git"
     },
-    "tags": [ "architecture", "dataaccess", "db", "database", "ado.net" ]
+    "tags": [ "quarks", "architecture", "dataaccess", "db", "database", "ado.net" ]
   },
   "title": "Quarks.DataAccess.Db",
-  "version": "1.1.0-*"
+  "version": "1.2.0-*"
 }
