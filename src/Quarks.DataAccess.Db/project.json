@@ -1,6 +1,6 @@
 ﻿{
   "dependencies": {
-    "Quarks.Transactions": "2.3.0-*",
+    "Quarks.Transactions": "2.3.2-*",
     "Dapper": "1.50.2" 
   },
   "frameworks": {
@@ -10,7 +10,7 @@
     },
     "netstandard1.3": {
       "dependencies": {
-        "System.Data.Common": "4.1.0"
+        "System.Data.Common": "4.3.0"
       }
     }
   },
@@ -26,5 +26,5 @@
     "tags": [ "quarks", "architecture", "dataaccess", "db", "database", "dapper" ]
   },
   "title": "Quarks.DataAccess.Db",
-  "version": "1.2.0-*"
+  "version": "1.2.1-*"
 }
