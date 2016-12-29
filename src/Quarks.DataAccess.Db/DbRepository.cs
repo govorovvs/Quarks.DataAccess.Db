@@ -19,10 +19,17 @@ namespace Quarks.DataAccess.Db
 
 		public IDbConnectionManager ConnectionManager { get; }
 
-		protected internal DbTransaction Transaction => DbTransaction.Transaction;
+		protected internal DbTransaction Transaction
+		{
+		    get { return DbTransaction.Transaction; }
+		}
 
-		protected internal DbConnection Connection => Transaction.Connection;
+	    protected internal DbConnection Connection
+	    {
+	        get { return Transaction.Connection; }
+	    }
 
+	    [Obsolete("Use DbConnection extension methods")]
 	    protected Task<int> ExecuteAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
 	    {
 	        CommandDefinition commandDefinition = 
@@ -31,6 +38,7 @@ namespace Quarks.DataAccess.Db
 	        return Connection.ExecuteAsync(commandDefinition);
 	    }
 
+        [Obsolete("Use DbConnection extension methods")]
         protected Task<IEnumerable<dynamic>> QueryAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
         {
             CommandDefinition commandDefinition =
@@ -39,6 +47,7 @@ namespace Quarks.DataAccess.Db
             return Connection.QueryAsync(commandDefinition);
         }
 
+        [Obsolete("Use DbConnection extension methods")]
         protected Task<IEnumerable<T>> QueryAsync<T>(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
 	    {
             CommandDefinition commandDefinition =
