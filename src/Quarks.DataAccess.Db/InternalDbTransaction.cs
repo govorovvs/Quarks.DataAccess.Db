@@ -80,7 +80,8 @@ namespace Quarks.DataAccess.Db
 				return new InternalDbTransaction(connectionManager);
 			}
 
-			string key = connectionManager.GetHashCode().ToString();
+			string key = 
+                $"{typeof(InternalDbTransaction).Name}_{connectionManager.GetHashCode()}";
 
 			IDependentTransaction current;
 			if (!transaction.DependentTransactions.TryGetValue(key, out current))
