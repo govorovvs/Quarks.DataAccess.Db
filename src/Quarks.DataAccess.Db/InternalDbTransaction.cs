@@ -24,7 +24,7 @@ namespace Quarks.DataAccess.Db
 
 		public IDbConnectionManager ConnectionManager { get; }
 
-		public void Dispose()
+		void IDisposable.Dispose()
 		{
 			if (_disposed)
 				return;
@@ -35,7 +35,7 @@ namespace Quarks.DataAccess.Db
 			_disposed = true;
 		}
 
-		public Task CommitAsync(CancellationToken cancellationToken)
+		Task IDependentTransaction.CommitAsync(CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
