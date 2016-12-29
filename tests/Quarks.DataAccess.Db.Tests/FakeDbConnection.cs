@@ -5,14 +5,14 @@ namespace Quarks.DataAccess.Db.Tests
 {
 	public class FakeDbConnection : DbConnection
 	{
-		private readonly System.Data.Common.DbTransaction _transaction;
+		private readonly DbTransaction _transaction;
 
-		public FakeDbConnection(System.Data.Common.DbTransaction transaction)
+		public FakeDbConnection(DbTransaction transaction)
 		{
 			_transaction = transaction;
 		}
 
-		protected override System.Data.Common.DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
+		protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
 		{
 			return _transaction;
 		}
