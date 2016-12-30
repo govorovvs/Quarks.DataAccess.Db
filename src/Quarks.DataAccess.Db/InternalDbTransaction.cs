@@ -20,11 +20,21 @@ namespace Quarks.DataAccess.Db
 			ConnectionManager = connectionManager;
 		}
 
-		public DbTransaction Transaction => GetOrCreateTransaction();
+		public DbTransaction Transaction
+		{
+		    get { return GetOrCreateTransaction(); }
+		}
 
-		public IDbConnectionManager ConnectionManager { get; }
+	    public IDbConnectionManager ConnectionManager { get; }
 
-		void IDisposable.Dispose()
+	    internal DbConnection CreateOpenedConnection()
+	    {
+            DbConnection connection = ConnectionManager.CreateConnection();
+            connection.Open();
+	        return connection;
+	    }
+
+		public void Dispose()
 		{
 			if (_disposed)
 				return;
@@ -35,7 +45,7 @@ namespace Quarks.DataAccess.Db
 			_disposed = true;
 		}
 
-		Task IDependentTransaction.CommitAsync(CancellationToken cancellationToken)
+		public Task CommitAsync(CancellationToken cancellationToken)
 		{
 			ThrowIfDisposed();
 
@@ -62,9 +72,8 @@ namespace Quarks.DataAccess.Db
 				{
 					if (_transaction == null)
 					{
-						_connection = ConnectionManager.CreateConnection();
-						_connection.Open();
-						_transaction = _connection.BeginTransaction();
+					    _connection = CreateOpenedConnection();
+                        _transaction = _connection.BeginTransaction();
 					}
 				}
 			}

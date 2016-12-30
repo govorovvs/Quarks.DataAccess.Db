@@ -3,6 +3,10 @@ using System.Data;
 
 namespace Quarks.DataAccess.Db
 {
+    /// <summary>
+    /// An object that represents a database query.
+    /// </summary>
+    /// <see href="http://www.martinfowler.com/eaaCatalog/queryObject.html"/>
     public class QueryObject
     {
         public QueryObject(string text, object parameters = null, CommandType? commandType = null)

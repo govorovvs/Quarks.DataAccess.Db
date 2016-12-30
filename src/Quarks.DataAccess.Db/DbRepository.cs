@@ -29,7 +29,12 @@ namespace Quarks.DataAccess.Db
 	        get { return Transaction.Connection; }
 	    }
 
-	    [Obsolete("Use DbConnection extension methods")]
+	    protected DbConnection CreateOpenedConnection()
+	    {
+	        return DbTransaction.CreateOpenedConnection();
+	    }
+
+        [Obsolete("Use DbConnection extension methods")]
 	    protected Task<int> ExecuteAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
 	    {
 	        CommandDefinition commandDefinition = 

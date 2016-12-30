@@ -10,7 +10,7 @@ using Assert = NUnit.Framework.Assert;
 namespace Quarks.DataAccess.Db.Tests
 {
 	[TestFixture]
-	public class DbTransactionTests
+	public class InternalDbTransactionTests
 	{
 		private CancellationToken _cancellationToken;
 		private FakeDbTransaction _transaction;
