@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB80A7D6-06DB-4178-A836-9A6D9F9A1A3F}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.cake = build.cake
 		build.cmd = build.cmd
 		build.ps1 = build.ps1
-		global.json = global.json
 		logo.png = logo.png
 	EndProjectSection
 EndProject
@@ -18,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{1B124465
 		tools\packages.config = tools\packages.config
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Quarks.DataAccess.Db", "src\Quarks.DataAccess.Db\Quarks.DataAccess.Db.xproj", "{F5AAACC8-39DB-4C35-92CD-3DAD2648029A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quarks.DataAccess.Db", "src\Quarks.DataAccess.Db\Quarks.DataAccess.Db.csproj", "{EC051822-9528-4859-B2BE-75401C1ACFB5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Quarks.DataAccess.Db.Tests", "tests\Quarks.DataAccess.Db.Tests\Quarks.DataAccess.Db.Tests.xproj", "{B8617FDD-98A1-40B3-80E4-292AC31597C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quarks.DataAccess.Db.Tests", "tests\Quarks.DataAccess.Db.Tests\Quarks.DataAccess.Db.Tests.csproj", "{658A6E10-30BA-4F8E-81D9-674015049EEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,14 +27,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F5AAACC8-39DB-4C35-92CD-3DAD2648029A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5AAACC8-39DB-4C35-92CD-3DAD2648029A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5AAACC8-39DB-4C35-92CD-3DAD2648029A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5AAACC8-39DB-4C35-92CD-3DAD2648029A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8617FDD-98A1-40B3-80E4-292AC31597C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8617FDD-98A1-40B3-80E4-292AC31597C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8617FDD-98A1-40B3-80E4-292AC31597C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8617FDD-98A1-40B3-80E4-292AC31597C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC051822-9528-4859-B2BE-75401C1ACFB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC051822-9528-4859-B2BE-75401C1ACFB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC051822-9528-4859-B2BE-75401C1ACFB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC051822-9528-4859-B2BE-75401C1ACFB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658A6E10-30BA-4F8E-81D9-674015049EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658A6E10-30BA-4F8E-81D9-674015049EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658A6E10-30BA-4F8E-81D9-674015049EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658A6E10-30BA-4F8E-81D9-674015049EEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
