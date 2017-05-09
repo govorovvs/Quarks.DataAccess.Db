@@ -34,10 +34,26 @@ Task("Initialize")
 );
 
 //////////////////////////////////////////////////////////////////////
+// NUGET
+//////////////////////////////////////////////////////////////////////
+
+Task("Restore")
+    .Does(() =>
+    {
+		MSBuild(SOLUTION_PATH, configurator =>
+			configurator.SetConfiguration(configuration)
+			.SetVerbosity(Verbosity.Normal)
+			.UseToolVersion(MSBuildToolVersion.VS2017)
+			.WithTarget("Restore"));
+    }
+);
+
+//////////////////////////////////////////////////////////////////////
 // BUILD
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
+	.IsDependentOn("Restore")
 	.Does(() =>
 	{
 		MSBuild(SOLUTION_PATH, configurator =>
@@ -117,6 +133,18 @@ Task("Publish")
 //////////////////////////////////////////////////////////////////////
 // HELPER METHODS 
 //////////////////////////////////////////////////////////////////////
+
+void PackProject(string projectPath)
+{
+	var settings = new DotNetCorePackSettings 
+	{
+		Configuration = configuration,
+		Verbose = true,
+		OutputDirectory = PACKAGES_DIR
+	};
+
+	DotNetCorePack(projectPath, settings);
+}
 
 void PublishPackage(string packagePath)
 {
