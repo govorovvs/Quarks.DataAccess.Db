@@ -1,8 +1,9 @@
-version: 1.2.1.{build}
-image: Visual Studio 2015
+version: 1.3.0.{build}
+image: Visual Studio 2017
 branches:
   only:
     - master
+    - develop
 build_script:
   - build.cmd --target=build --configuration=Release
   - build.cmd --target=tests --configuration=Release
@@ -10,5 +11,5 @@ build_script:
 test: off
 deploy: off 
 artifacts:
-  - path: TestResult.xml
+  - path: 'artifacts\unit-tests.xml'
   - path: 'packages\*.nupkg'

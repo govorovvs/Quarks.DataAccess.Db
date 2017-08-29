@@ -1,55 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
-using Dapper;
-using Quarks.DataAccess.Db.ConnectionManagement;
 
 namespace Quarks.DataAccess.Db
 {
-	public abstract class DbRepository
+    public abstract class DbRepository
 	{
-		protected DbRepository(IDbConnectionManager connectionManager)
-		{
-			if (connectionManager == null) throw new ArgumentNullException(nameof(connectionManager));
+	    private readonly IDbConnectionProvider _connectionProvider;
 
-			ConnectionManager = connectionManager;
-		}
-
-		public IDbConnectionManager ConnectionManager { get; }
-
-		protected internal DbTransaction Transaction => DbTransaction.Transaction;
-
-		protected internal DbConnection Connection => Transaction.Connection;
-
-	    protected Task<int> ExecuteAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
+	    protected DbRepository(IDbConnectionProvider connectionProvider)
 	    {
-	        CommandDefinition commandDefinition = 
-                new CommandDefinition(queryObject.Text, queryObject.Parameters, Transaction, commandTimeout, queryObject.CommandType, cancellationToken:cancellationToken);
+            if (connectionProvider == null) throw new ArgumentNullException(nameof(connectionProvider));
 
-	        return Connection.ExecuteAsync(commandDefinition);
+            _connectionProvider = connectionProvider;
 	    }
 
-        protected Task<IEnumerable<dynamic>> QueryAsync(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
-        {
-            CommandDefinition commandDefinition =
-                new CommandDefinition(queryObject.Text, queryObject.Parameters, Transaction, commandTimeout, queryObject.CommandType, cancellationToken: cancellationToken);
-
-            return Connection.QueryAsync(commandDefinition);
-        }
-
-        protected Task<IEnumerable<T>> QueryAsync<T>(QueryObject queryObject, CancellationToken cancellationToken, int? commandTimeout = null)
-	    {
-            CommandDefinition commandDefinition =
-                new CommandDefinition(queryObject.Text, queryObject.Parameters, Transaction, commandTimeout, queryObject.CommandType, cancellationToken: cancellationToken);
-
-            return Connection.QueryAsync<T>(commandDefinition);
-        }
-
-        private InternalDbTransaction DbTransaction
+		protected internal DbTransaction Transaction
 		{
-			get { return InternalDbTransaction.GetCurrent(ConnectionManager); }
+		    get { return _connectionProvider.Transaction; }
 		}
+
+	    protected internal DbConnection Connection
+	    {
+	        get { return _connectionProvider.Connection; }
+	    }
 	}
 }

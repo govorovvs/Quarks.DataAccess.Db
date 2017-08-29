@@ -12,16 +12,18 @@ var nugetApiKey =  Argument("apikey", "");
 //////////////////////////////////////////////////////////////////////
 
 string SOLUTION_DIR = Context.Environment.WorkingDirectory.FullPath;
+string SOLUTION_PATH = System.IO.Directory.GetFiles(SOLUTION_DIR, "*.sln").Single();
 string TOOLS_DIR = SOLUTION_DIR + "/tools";
 string PACKAGES_DIR = SOLUTION_DIR + "/packages";
 string SOURCE_DIR = SOLUTION_DIR + "/src";
 string TESTS_DIR = SOLUTION_DIR + "/tests";
 string ARTIFACTS_DIR = SOLUTION_DIR + "/artifacts";
 
+string NUNIT_EXE_PATH = TOOLS_DIR + "/NUnit.ConsoleRunner/tools/nunit3-console.exe";
 string NUGET_EXE_PATH = TOOLS_DIR + "/nuget.exe";
 
-string[] projects = System.IO.Directory.GetDirectories(SOURCE_DIR);
-string[] testProjects = System.IO.Directory.GetDirectories(TESTS_DIR);
+var projects = System.IO.Directory.GetFiles(SOURCE_DIR, "*.csproj", System.IO.SearchOption.AllDirectories);
+var testProjects = System.IO.Directory.GetFiles(TESTS_DIR, "*.csproj", System.IO.SearchOption.AllDirectories);
 
 //////////////////////////////////////////////////////////////////////
 // INITIALIZE
@@ -41,7 +43,9 @@ Task("Initialize")
 Task("Restore")
     .Does(() =>
     {
-        DotNetCoreRestore();
+		var settings = new DotNetCoreRestoreSettings();
+
+		DotNetCoreRestore(SOLUTION_PATH, settings);
     }
 );
 
@@ -68,7 +72,7 @@ Task("Tests")
 	.IsDependentOn("Initialize")
 	.IsDependentOn("Build")
 	.Does(() =>
-	{
+	{	
 		foreach(var project in testProjects)
 		{
 			TestProject(project);
@@ -81,11 +85,13 @@ Task("Tests")
 //////////////////////////////////////////////////////////////////////
 
 Task("Pack")
+	.IsDependentOn("Build")
 	.Does(() =>
 	{
-		CleanDirectories(PACKAGES_DIR);
+		CreateDirectory(PACKAGES_DIR);
+		CleanDirectory(PACKAGES_DIR);
 
-		foreach(var project in projects)
+		foreach (var project in projects)
 		{
 			PackProject(project);
 		}
@@ -100,8 +106,6 @@ Task("Publish")
 	.IsDependentOn("Pack")
 	.Does(() =>
 	{
-		DeleteFiles(PACKAGES_DIR + "/*.symbols.nupkg");
-
 		string[] packages = System.IO.Directory.GetFiles(PACKAGES_DIR, "*.nupkg");
 
 		foreach(var package in packages)
@@ -120,23 +124,10 @@ void BuildProject(string projectPath)
 	var settings = new DotNetCoreBuildSettings
 	{
 		Configuration = configuration,
-		Verbose = true,
 		NoIncremental = true
 	};
 
 	DotNetCoreBuild(projectPath, settings);
-}
-
-void TestProject(string projectPath)
-{
-	var settings = new DotNetCoreTestSettings 
-	{
-		Configuration = configuration,
-		Verbose = true,
-		NoBuild = false
-	};
-
-	DotNetCoreTest(projectPath, settings);
 }
 
 void PackProject(string projectPath)
@@ -144,7 +135,6 @@ void PackProject(string projectPath)
 	var settings = new DotNetCorePackSettings 
 	{
 		Configuration = configuration,
-		Verbose = true,
 		OutputDirectory = PACKAGES_DIR
 	};
 
@@ -161,6 +151,17 @@ void PublishPackage(string packagePath)
 	};
 
 	NuGetPush(packagePath, settings);
+}
+
+void TestProject(string projectPath)
+{
+	var settings = new DotNetCoreTestSettings 
+	{
+		Configuration = configuration,
+		NoBuild = false
+	};
+
+	DotNetCoreTest(projectPath, settings);
 }
 
 //////////////////////////////////////////////////////////////////////

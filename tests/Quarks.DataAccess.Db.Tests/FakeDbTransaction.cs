@@ -3,7 +3,7 @@ using System.Data.Common;
 
 namespace Quarks.DataAccess.Db.Tests
 {
-	public class FakeDbTransaction : System.Data.Common.DbTransaction
+	public class FakeDbTransaction : DbTransaction
 	{
 		public override void Commit()
 		{

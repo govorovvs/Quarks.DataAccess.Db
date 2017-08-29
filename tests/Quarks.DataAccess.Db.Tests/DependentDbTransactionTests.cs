@@ -3,45 +3,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Quarks.DataAccess.Db.ConnectionManagement;
 using Quarks.Transactions;
-using Assert = NUnit.Framework.Assert;
 
 namespace Quarks.DataAccess.Db.Tests
 {
 	[TestFixture]
-	public class DbTransactionTests
-	{
+	public class DependentDbTransactionTests
+    {
 		private CancellationToken _cancellationToken;
-		private FakeDbTransaction _transaction;
-		private FakeDbConnection _connection;
-		private IDbConnectionManager _connectionManager;
+		private FakeDbTransaction _dbTransaction;
+		private FakeDbConnection _dbConnection;
+		private Mock<IDbConnectionFactory> _mockConnectionFactory;
+        private DependentDbTransaction _transaction;
 
-		[SetUp]
+        [SetUp]
 		public void SetUp()
 		{
 			_cancellationToken = new CancellationTokenSource().Token;
-			_transaction = new FakeDbTransaction();
-			_connection = new FakeDbConnection(_transaction);
-			_connectionManager = new Mock<IDbConnectionManager>().Object;
+			_dbTransaction = new FakeDbTransaction();
+			_dbConnection = new FakeDbConnection(_dbTransaction);
+            _mockConnectionFactory = new Mock<IDbConnectionFactory>();
 
-			Mock.Get(_connectionManager)
-				.Setup(x => x.CreateConnection())
-				.Returns(_connection);
-		}
-
-	    [Test]
-		public void Can_Be_Constructed_With_ConnectionManager()
-		{
-			InternalDbTransaction transaction = new InternalDbTransaction(_connectionManager);
-
-			Assert.That(transaction.ConnectionManager, Is.EqualTo(_connectionManager));
+			_mockConnectionFactory
+				.Setup(x => x.Create())
+				.Returns(_dbConnection);
+            _transaction = new DependentDbTransaction(_mockConnectionFactory.Object);
 		}
 
 		[Test]
 		public void Is_Instance_Of_IDependentTransaction()
 		{
-			InternalDbTransaction transaction = CreateTransaction();
+			var transaction = CreateTransaction();
 
 			Assert.That(transaction, Is.InstanceOf<IDependentTransaction>());
 		}
@@ -49,29 +41,29 @@ namespace Quarks.DataAccess.Db.Tests
 		[Test]
 		public void Transaction_Test()
 		{
-			InternalDbTransaction transaction = CreateTransaction();
+			var transaction = CreateTransaction();
 
-			Assert.That(transaction.Transaction, Is.SameAs(_transaction));
+			Assert.That(transaction.Transaction, Is.SameAs(_dbTransaction));
 		}
 
 		[Test]
 		public void Dispose_Disposes_Transaction()
 		{
-			InternalDbTransaction transaction = CreateTransaction();
+			var transaction = CreateTransaction();
 
 			transaction.Dispose();
 
-			Assert.That(_transaction.IsDisposed, Is.True);
+			Assert.That(_dbTransaction.IsDisposed, Is.True);
 		}
 
 		[Test]
 		public void Dispose_Disposes_Connection()
 		{
-			InternalDbTransaction transaction = CreateTransaction();
+			var transaction = CreateTransaction();
 
 			transaction.Dispose();
 
-			Assert.That(_connection.IsDisposed, Is.True);
+			Assert.That(_dbConnection.IsDisposed, Is.True);
 		}
 
 		[Test]
@@ -90,7 +82,7 @@ namespace Quarks.DataAccess.Db.Tests
 
 			await transaction.CommitAsync(_cancellationToken);
 
-			Assert.That(_transaction.IsCommitted, Is.True);
+			Assert.That(_dbTransaction.IsCommitted, Is.True);
 		}
 
 		[Test]
@@ -103,9 +95,9 @@ namespace Quarks.DataAccess.Db.Tests
 			Assert.ThrowsAsync<ObjectDisposedException>(() => transaction.CommitAsync(_cancellationToken));
 		}
 
-		private InternalDbTransaction CreateTransaction()
+		private DependentDbTransaction CreateTransaction()
 		{
-			var transaction =  new InternalDbTransaction(_connectionManager);
+			var transaction = new DependentDbTransaction(_mockConnectionFactory.Object);
 
 			Assert.That(transaction.Transaction, Is.Not.Null);
 
